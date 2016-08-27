@@ -1,0 +1,52 @@
+#ASSIGN COMMAND LINE VARIABLES
+
+#ADD MARIADB 10.0 DATABASE
+echo "[mariadb]" > /etc/yum.repos.d/MariaDB.repo
+echo "name = MariaDB" >> /etc/yum.repos.d/MariaDB.repo
+echo "baseurl = http://yum.mariadb.org/10.0/centos6-amd64" >> /etc/yum.repos.d/MariaDB.repo
+echo "gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB" >> /etc/yum.repos.d/MariaDB.repo
+echo "gpgcheck=1" >> /etc/yum.repos.d/MariaDB.repo
+
+#Install EPEL repo
+sudo  yum install -y epel-release
+
+#INSTALL ALL REQUIRED PACKAGES
+sudo yum update -y
+
+sudo yum install -y wget mlocate
+
+#Install MariaDB and start
+sudo yum install -y mariadb-server mariadb-client
+sudo systemctl enable mariadb
+sudo systemctl start mariadb
+
+#Install Python packages for Alexa tool
+sudo yum install -y python-devel python python-beautifulsoup4 python-requests
+
+#Install PHP packages
+sudo yum install -y php php-mssql php-mysqlnd
+
+#Install Bro prerequiste packages
+sudo yum install -y cmake make gcc gcc-c++ flex bison libpcap-devel openssl-devel  swig zlib-devel GeoIP-devel GeoIP GeoIP-update gperftools-devel gperftools
+
+#INSTALL BRO FROM SOURCE
+wget https://www.bro.org/downloads/release/bro-2.4.1.tar.gz
+tar -xvzf bro-2.4.1.tar.gz
+cd bro-2.4.1
+sudo ./configure
+sudo make
+sudo make install
+cd aux
+cd bro-aux
+sudo ./configure
+sudo make
+sudo make install
+
+#SECURE MYSQL DB
+sudo mysql_secure_installation
+
+sudo mysql --password=<password>
+create database test;
+
+
+
