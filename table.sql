@@ -3,64 +3,22 @@ DROP TABLE IF EXISTS `bro_conn`;
 CREATE TABLE IF NOT EXISTS `bro_conn` (
   `CONN_ID` bigint(20) unsigned NOT NULL,
   `CONN_TS` timestamp(6) NOT NULL,
-  `CONN_UID` char(20) NOT NULL,
+  `CONN_UID` varchar(20) NOT NULL,
   `CONN_ORIGH` varbinary(16) NOT NULL,
   `CONN_ORIGP` smallint(5) unsigned NOT NULL,
   `CONN_RESPH` varbinary(16) NOT NULL,
   `CONN_RESPP` smallint(5) unsigned NOT NULL,
-  `CONN_PROTO` char(4) NOT NULL,
-  `CONN_SERVICE` char(7) NOT NULL,
+  `CONN_PROTO` varchar(10) NOT NULL,
+  `CONN_SERVICE` varchar(7) NOT NULL,
   `CONN_DURATION` decimal(11,6) NOT NULL,
   `CONN_ORIGBYTES` int(10) unsigned NOT NULL,
   `CONN_RESPBYTES` int(10) unsigned NOT NULL,
-  `CONN_CONNSTATE` char(10) NOT NULL,
-  `CONN_HISTORY` char(10) NOT NULL,
+  `CONN_CONNSTATE` varchar(10) NOT NULL,
+  `CONN_HISTORY` varchar(10) NOT NULL,
   `CONN_ORIGPKTS` int(10) unsigned NOT NULL,
   `CONN_ORIGIPBYTES` int(10) unsigned NOT NULL,
   `CONN_RESPPKTS` int(10) unsigned NOT NULL,
   `CONN_RESPIPBYTES` int(10) unsigned NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-DROP TABLE IF EXISTS `bro_dns`;
-CREATE TABLE IF NOT EXISTS `bro_dns` (
-  `DNS_ID` bigint(20) unsigned NOT NULL,
-  `DNS_UID` char(20) NOT NULL,
-  `DNS_TRANSID` char(20) NOT NULL,
-  `DNS_QUERY` char(255) NOT NULL,
-  `DNS_CLASSNAME` char(255) NOT NULL,
-  `DNS_TYPENAME` char(255) NOT NULL,
-  `DNS_ANSWERS` char(255) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-DROP TABLE IF EXISTS `bro_file`;
-CREATE TABLE IF NOT EXISTS `bro_file` (
-  `FILE_ID` bigint(20) unsigned NOT NULL,
-  `FILE_FUID` char(20) NOT NULL,
-  `FILE_TXHOST` varbinary(16) NOT NULL,
-  `FILE_RXHOST` varbinary(16) NOT NULL,
-  `FILE_UID` char(20) NOT NULL,
-  `FILE_SOURCE` char(254) NOT NULL,
-  `FILE_ANALYZERS` char(50) NOT NULL,
-  `FILE_MIME` char(50) NOT NULL,
-  `FILE_FILENAME` char(100) NOT NULL,
-  `FILE_MD5` char(32) NOT NULL,
-  `FILE_SHA1` char(40) NOT NULL,
-  `FILE_SHA256` char(64) NOT NULL,
-  `FILE_EXTRACTED` char(20) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-DROP TABLE IF EXISTS `bro_http`;
-CREATE TABLE IF NOT EXISTS `bro_http` (
-  `HTTP_ID` bigint(20) unsigned NOT NULL,
-  `HTTP_UID` char(20) NOT NULL,
-  `HTTP_METHOD` char(10) NOT NULL,
-  `HTTP_HOST` char(255) NOT NULL,
-  `HTTP_URI` char(255) NOT NULL,
-  `HTTP_REFERRER` char(255) NOT NULL,
-  `HTTP_USERAGENT` char(255) NOT NULL,
-  `HTTP_REQLEN` smallint(5) unsigned NOT NULL,
-  `HTTP_RESPLEN` smallint(5) unsigned NOT NULL,
-  `HTTP_STATUSCODE` smallint(5) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 ALTER TABLE `bro_conn`
@@ -70,10 +28,44 @@ ALTER TABLE `bro_conn`
   ADD KEY `CONN_RESPH` (`CONN_RESPH`),
   ADD KEY `CONN_RESPP` (`CONN_RESPP`);
 
+ALTER TABLE `bro_conn`
+  MODIFY `CONN_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT;
+  
+DROP TABLE IF EXISTS `bro_dns`;
+CREATE TABLE IF NOT EXISTS `bro_dns` (
+  `DNS_ID` bigint(20) unsigned NOT NULL,
+  `DNS_UID` varchar(20) NOT NULL,
+  `DNS_TRANSID` varchar(20) NOT NULL,
+  `DNS_QUERY` varchar(255) NOT NULL,
+  `DNS_CLASSNAME` varchar(255) NOT NULL,
+  `DNS_TYPENAME` varchar(255) NOT NULL,
+  `DNS_ANSWERS` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 ALTER TABLE `bro_dns`
   ADD PRIMARY KEY (`DNS_ID`),
   ADD KEY `DNS_UID` (`DNS_UID`),
   ADD KEY `DNS_QUERY` (`DNS_QUERY`);
+
+ALTER TABLE `bro_dns`
+  MODIFY `DNS_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT;  
+  
+DROP TABLE IF EXISTS `bro_file`;
+CREATE TABLE IF NOT EXISTS `bro_file` (
+  `FILE_ID` bigint(20) unsigned NOT NULL,
+  `FILE_FUID` varchar(20) NOT NULL,
+  `FILE_TXHOST` varbinary(16) NOT NULL,
+  `FILE_RXHOST` varbinary(16) NOT NULL,
+  `FILE_UID` varchar(20) NOT NULL,
+  `FILE_SOURCE` varchar(254) NOT NULL,
+  `FILE_ANALYZERS` varchar(50) NOT NULL,
+  `FILE_MIME` varchar(50) NOT NULL,
+  `FILE_FILENAME` varchar(100) NOT NULL,
+  `FILE_MD5` varchar(32) NOT NULL,
+  `FILE_SHA1` varchar(40) NOT NULL,
+  `FILE_SHA256` varchar(64) NOT NULL,
+  `FILE_EXTRACTED` varchar(20) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 ALTER TABLE `bro_file`
   ADD PRIMARY KEY (`FILE_ID`),
@@ -82,17 +74,66 @@ ALTER TABLE `bro_file`
   ADD KEY `FILE_RXHOST` (`FILE_RXHOST`),
   ADD KEY `FILE_UID` (`FILE_UID`);
 
-ALTER TABLE `bro_http`
-  ADD PRIMARY KEY `HTTP_ID` (`HTTP_ID`);
-
-ALTER TABLE `bro_conn`
-  MODIFY `CONN_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `bro_dns`
-  MODIFY `DNS_ID` bigint(20) NOT NULL AUTO_INCREMENT;
-  
 ALTER TABLE `bro_file`
-  MODIFY `FILE_ID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `FILE_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT;  
+  
+DROP TABLE IF EXISTS `bro_http`;
+CREATE TABLE IF NOT EXISTS `bro_http` (
+  `HTTP_ID` bigint(20) unsigned NOT NULL,
+  `HTTP_UID` varchar(20) NOT NULL,
+  `HTTP_METHOD` varchar(10) NOT NULL,
+  `HTTP_HOST` varchar(255) NOT NULL,
+  `HTTP_URI` varchar(255) NOT NULL,
+  `HTTP_REFERRER` varchar(255) NOT NULL,
+  `HTTP_USERAGENT` varchar(255) NOT NULL,
+  `HTTP_REQLEN` smallint(5) unsigned NOT NULL,
+  `HTTP_RESPLEN` smallint(5) unsigned NOT NULL,
+  `HTTP_STATUSCODE` smallint(5) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 ALTER TABLE `bro_http`
-  MODIFY `HTTP_ID` bigint(20) NOT NULL AUTO_INCREMENT;  
+  ADD PRIMARY KEY (`HTTP_ID`);
+
+ALTER TABLE `bro_http`
+  MODIFY `HTTP_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT;  
+  
+DROP TABLE IF EXISTS `bro_ssl`;
+CREATE TABLE IF NOT EXISTS `bro_ssl` (
+  `SSL_ID` bigint(20) unsigned NOT NULL,
+  `SSL_UID` varchar(20) NOT NULL,
+  `SSL_VERSION` varchar(15) NOT NULL,
+  `SSL_CIPHER` varchar(255) NOT NULL,
+  `SSL_SERVER` varchar(255) NOT NULL,
+  `SSL_SUBJECT` varchar(255) NOT NULL,
+  `SSL_ISSUER` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+ALTER TABLE `bro_ssl`
+  ADD PRIMARY KEY (`SSL_ID`),
+  ADD KEY `SSL_UID` (`SSL_UID`);
+
+ALTER TABLE `bro_ssl`
+  MODIFY `SSL_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT;  
+  
+DROP TABLE IF EXISTS `bro_x509`;
+CREATE TABLE IF NOT EXISTS `bro_x509` (
+  `X509_ID` bigint(20) unsigned NOT NULL,
+  `X509_FUID` varchar(20) NOT NULL,
+  `X509_VERSION` tinyint unsigned NOT NULL,
+  `X509_SERIAL` varchar(255) NOT NULL,
+  `X509_SUBJECT` varchar(255) NOT NULL,
+  `X509_ISSUER` varchar(255) NOT NULL,
+  `X509_NOTVALIDBEFORE` timestamp NOT NULL,
+  `X509_NOTVALIDAFTER` timestamp NOT NULL,
+  `X509_KEYALG` varchar(255) NOT NULL,
+  `X509_SIGALG` varchar(255) NOT NULL,
+  `X509_KEYTYPE` varchar(255) NOT NULL,
+  `X509_KEYLENGTH` smallint unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+ALTER TABLE `bro_x509`
+  ADD PRIMARY KEY (`X509_ID`),
+  ADD KEY `X509_FUID` (`X509_FUID`);  
+  
+ALTER TABLE `bro_x509`
+  MODIFY `X509_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT; 
