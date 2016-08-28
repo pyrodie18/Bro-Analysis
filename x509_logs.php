@@ -33,14 +33,9 @@ $currentFile = "../test2/x509.log"; //use only for testing
 		$sigAlg = ReturnString($tmpRecord[X509_SIGALG]);
 		$keyType = ReturnString($tmpRecord[X509_KEYTYPE]);
 		$keyLen = ReturnString($tmpRecord[X509_KEYLENGTH]);
-		$sanDNS = ReturnString($tmpRecord[X509_SANDNS]);
-		$sanURI = ReturnString($tmpRecord[X509_SANURI]);
-		$sanEmail = ReturnString($tmpRecord[X509_SANEMAIL]);
-		$sanIP = ReturnString($tmpRecord[X509_SANIP]);
-		$ca = ReturnString($tmpRecord[X509_CA]);
 		
 		//Build $currentRecordVals
-		$currentRecordVals = "('$fuid', $version, '$serial', '$subject', '$issuer', FROM_UNIXTIME($notValidBefore), FROM_UNIXTIME($notValidAfter), '$keyAlg', '$sigAlg', '$keyType', $keyLen, '$sanDNS', '$sanURI', '$sanEmail', '$sanIP', '$ca')";
+		$currentRecordVals = "('$fuid', $version, '$serial', '$subject', '$issuer', FROM_UNIXTIME($notValidBefore), FROM_UNIXTIME($notValidAfter), '$keyAlg', '$sigAlg', '$keyType', $keyLen)";
 
 		if ($i == 1) { //First record, no need to add the comma
 			$insertStatement = $insertStatement . $currentRecordVals;

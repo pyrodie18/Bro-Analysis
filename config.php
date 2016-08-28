@@ -90,7 +90,7 @@ define('FILE_SHA256', 21);  //SHA265
 define('FILE_EXTRACTED', 22);  //Local File Name if Extracted
 
 // ** This section contains all conifguration settings for bro SSL logs ** //
-define("SSL_LOG_INSERT", "INSERT INTO bro_ssl (SSL_UID, SSL_VERSION, SSL_CIPHER, SSL_SERVER, SSL_SUBJECT, SSL_ISSUER, SSL_CLIENT_SUBJECT, SSL_CLIENT_ISSUER) VALUES "); //Holds the overall SQL insert statement
+define("SSL_LOG_INSERT", "INSERT INTO bro_ssl (SSL_UID, SSL_VERSION, SSL_CIPHER, SSL_SERVER, SSL_SUBJECT, SSL_ISSUER) VALUES "); //Holds the overall SQL insert statement
 define('SSL_TS', 0);  //Timestamp
 define('SSL_UID', 1);  //UID
 define('SSL_ORIGH', 2);  //Originating Host
@@ -101,14 +101,11 @@ define('SSL_VERSION', 6);  //SSL Version
 define('SSL_CIPHER', 7);  //Cipher Suite
 define('SSL_SERVER', 9);  //Certificate Server Name
 define('SSL_CHAIN_FUID', 14);  //Certificate Chain File UIDs
-define('SSL_CLIENT_CHAIN_FUID', 15);  //Client Certificate Chain File UIDs
 define('SSL_SUBJECT', 16);  //X.509 Subject
 define('SSL_ISSUER', 17);  //Certificate Issuer
-define('SSL_CLIENT_SUBJECT', 18);  //Subject of X.509 Client
-define('SSL_CLIENT_ISSUER', 19);  //Subject of X.509 Issuer
 
 // ** This section contains all conifguration settings for bro X509 logs ** //
-define("X509_LOG_INSERT", "INSERT INTO bro_x509 (X509_FUID, X509_VERSION, X509_SERIAL, X509_SUBJECT, X509_ISSUER, X509_NOTVALIDBEFORE, X509_NOTVALIDAFTER, X509_KEYALG, X509_SIGALG, X509_KEYTYPE, X509_KEYLENGTH, X509_SANDNS, X509_SANURI, X509_SANEMAIL, X509_SANIP, X509_CA) VALUES "); //Holds the overall SQL insert statement
+define("X509_LOG_INSERT", "INSERT INTO bro_x509 (X509_FUID, X509_VERSION, X509_SERIAL, X509_SUBJECT, X509_ISSUER, X509_NOTVALIDBEFORE, X509_NOTVALIDAFTER, X509_KEYALG, X509_SIGALG, X509_KEYTYPE, X509_KEYLENGTH) VALUES "); //Holds the overall SQL insert statement
 define('X509_TS', 0);  //Timestamp
 define('X509_FUID', 1);  //File UID
 define('X509_VERSION', 2);  //Version Number

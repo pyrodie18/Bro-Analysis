@@ -28,11 +28,9 @@ $currentFile = "../test2/ssl.log"; //use only for testing
 		$server = ReturnString($tmpRecord[SSL_SERVER]);
 		$subject = ReturnString($tmpRecord[SSL_SUBJECT]);
 		$issuer = ReturnString($tmpRecord[SSL_ISSUER]);
-		$clisubject = ReturnString($tmpRecord[SSL_CLIENT_SUBJECT]);
-		$cliissuer = ReturnString($tmpRecord[SSL_CLIENT_ISSUER]);
 		
 		//Build $currentRecordVals
-		$currentRecordVals = "('$uid', '$version', '$cipher', '$server', '$subject', '$issuer', '$clisubject', '$cliissuer')";
+		$currentRecordVals = "('$uid', '$version', '$cipher', '$server', '$subject', '$issuer')";
 	
 		if ($i == 1) { //First record, no need to add the comma
 			$insertStatement = $insertStatement . $currentRecordVals;
