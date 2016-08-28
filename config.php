@@ -5,7 +5,6 @@
  * Column should be entered starting from 0 on the left and moving right.
  */
 
-
 define('DB_NAME', 'test');
 
 /** MySQL database username */
@@ -54,16 +53,10 @@ define('HTTP_USERAGENT', 11);  //User Agent String
 define('HTTP_REQLEN', 12);  //Request Length
 define('HTTP_RESPLEN', 13);  //Responding Length
 define('HTTP_STATUSCODE', 14);  //Status Code
-define('HTTP_STATUSMSG', 15);  //Status Message
 
 // ** This section contains all conifguration settings for bro DNS logs ** //
 define("DNS_LOG_INSERT", "INSERT INTO bro_dns (DNS_UID, DNS_TRANSID, DNS_QUERY, DNS_CLASSNAME, DNS_TYPENAME, DNS_ANSWERS) VALUES "); //Holds the overall SQL insert statement
 define('DNS_UID', 1);  //UID
-define('DNS_ORIGH', 2);  //Originating Host
-define('DNS_ORIGP', 3);  //Originatin Port
-define('DNS_RESPH', 4);  //Responding Host
-define('DNS_RESPP', 5);  //Responding Port
-define('DNS_PROTO', 6);  //Protocol
 define('DNS_TRANSID', 7);  //Transaction ID
 define('DNS_QUERY', 8);  //Query
 define('DNS_CLASSNAME', 10);  //Class Name
@@ -95,30 +88,6 @@ define('FILE_MD5', 19);  //MD5
 define('FILE_SHA1', 20);  //SHA1
 define('FILE_SHA256', 21);  //SHA265
 define('FILE_EXTRACTED', 22);  //Local File Name if Extracted
-
-// ** This section contains all conifguration settings for bro FTP logs ** //
-define("FTP_LOG_INSERT", "INSERT INTO bro_dns (uid, command, arg, mime, size, replycode, fuid) VALUES "); //Holds the overall SQL insert statement
-define('FTP_TS', 0);  //Timestamp
-define('FTP_UID', 1);  //UID
-define('FTP_ORIGH', 2);  //Originating Host
-define('FTP_ORIGP', 3);  //Originatin Port
-define('FTP_RESPH', 4);  //Responding Host
-define('FTP_RESPP', 5);  //Responding Port
-define('FTP_COMMAND', 8);  //Command
-define('FTP_ARG', 9);  //Command Arguments
-define('FTP_MIME', 10);  //MIME Type
-define('FTP_SIZE', 11);  //File Size
-define('FTP_RPLYCODE', 12);  //Reply Code
-define('FTP_FUID', 15);  //File UID
-
-// ** This section contains all conifguration settings for bro SMTP logs ** //
-define('SMTP_TS', 0);  //Timestamp
-define('SMTP_UID', 1);  //UID
-define('SMTP_ORIGH', 2);  //Originating Host
-define('SMTP_ORIGP', 3);  //Originatin Port
-define('SMTP_RESPH', 4);  //Responding Host
-define('SMTP_RESPP', 5);  //Responding Port
-define('SMTP_STATUS', 6);  //SMTPection Status
 
 // ** This section contains all conifguration settings for bro SSL logs ** //
 define("SSL_LOG_INSERT", "INSERT INTO bro_ssl (SSL_UID, SSL_VERSION, SSL_CIPHER, SSL_SERVER, SSL_SUBJECT, SSL_ISSUER, SSL_CLIENT_SUBJECT, SSL_CLIENT_ISSUER) VALUES "); //Holds the overall SQL insert statement
@@ -152,12 +121,5 @@ define('X509_KEYALG', 8);  //Key Algorithim
 define('X509_SIGALG', 9);  //Signature Algorithim
 define('X509_KEYTYPE', 10);  //Key Type
 define('X509_KEYLENGTH', 11);  //Key Length
-define('X509_SANDNS', 14);  //SAN DNS
-define('X509_SANURI', 15);  //SAN URI
-define('X509_SANEMAIL', 16);  //SAN Email
-define('X509_SANIP', 17);  //SAN IP
-define('X509_CA', 18);  //Certificate Authorityy
-define('X509_PATHLEN', 19);  //Certificate Path Length
-
 ?>
 
