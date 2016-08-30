@@ -55,12 +55,14 @@ define('HTTP_RESPLEN', 13);  //Responding Length
 define('HTTP_STATUSCODE', 14);  //Status Code
 
 // ** This section contains all conifguration settings for bro DNS logs ** //
-define("DNS_LOG_INSERT", "INSERT INTO bro_dns (DNS_UID, DNS_TRANSID, DNS_QUERY, DNS_CLASSNAME, DNS_TYPENAME, DNS_ANSWERS) VALUES "); //Holds the overall SQL insert statement
+define("DNS_LOG_INSERT", "INSERT INTO bro_dns (DNS_UID, DNS_TRANSID, DNS_QUERY, DNS_CLASSNAME, DNS_TYPENAME, DNS_RESPONSECODENAME, DNS_ANSWERS) VALUES "); //Holds the overall SQL insert statement
 define('DNS_UID', 1);  //UID
+define('DNS_TS', 0);  //Time Stamp
 define('DNS_TRANSID', 7);  //Transaction ID
 define('DNS_QUERY', 8);  //Query
 define('DNS_CLASSNAME', 10);  //Class Name
 define('DNS_TYPENAME', 12);  //Type Name
+define('DNS_RESPONSECODENAME', 14);  //Type Name
 define('DNS_ANSWERS', 20);  //Query Answers
 
 // ** This section contains all conifguration settings for bro DHCP logs ** //

@@ -50,6 +50,28 @@ function db_query($query) {
 	return $result;
 }
 
+function num_rows($query) {
+	// Connect to the database
+	$connection = db_connect();
+
+	/* check connection */
+	if (mysqli_connect_errno()) {
+    		printf("Connect failed: %s\n", mysqli_connect_error());
+    		exit();
+	}
+
+	if ($result = mysqli_query($connection, $query)) {
+
+		/* determine number of rows result set */
+		$row_cnt = mysqli_num_rows($result);
+
+		/* close result set */
+		mysqli_free_result($result);
+	}
+	
+	return $row_cnt;
+}
+
 function is_ip($str) {
 	$ret = filter_var($str, FILTER_VALIDATE_IP);
 	return $ret;
