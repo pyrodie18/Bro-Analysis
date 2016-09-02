@@ -28,4 +28,5 @@ if __name__ == '__main__':
             items = bullet.find_all('div')
             rank = items[0].get_text().strip()
             site = items[1].p.get_text().strip()
-            print('%s%s%s' % (rank, delimiter, site))
+            #print('%s%s%s' % (rank, delimiter, site))
+            print('%s' % (site))
