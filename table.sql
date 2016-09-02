@@ -36,7 +36,8 @@ CREATE TABLE IF NOT EXISTS `bro_dns` (
   `DNS_ID` bigint(20) unsigned NOT NULL,
   `DNS_UID` varchar(20) NOT NULL,
   `DNS_TRANSID` varchar(20) NOT NULL,
-  `DNS_QUERY` varchar(255) NOT NULL,
+  `DNS_QUERY_SUBDOMAIN` varchar(255) NOT NULL,
+  `DNS_QUERY_TLD` varchar(255) NOT NULL,
   `DNS_CLASSNAME` varchar(255) NOT NULL,
   `DNS_TYPENAME` varchar(255) NOT NULL,
   `DNS_RESPONSECODENAME` varchar(255) NOT NULL,
@@ -150,3 +151,7 @@ CREATE TABLE IF NOT EXISTS `passive_dns` (
 
 ALTER TABLE `passive_dns`
   ADD PRIMARY KEY (`PASSIVE_QUERY`, `PASSIVE_ANSWER`);
+
+CREATE TABLE `test`.`Alexa` ( `Alexa_site` VARCHAR(30) NOT NULL , PRIMARY KEY (`Alexa_site`)) ENGINE = MyISAM;
+
+CREATE TABLE `test`.`exempt_ips` ( `exempt_address` VARBINARY(16) NOT NULL , `exempt_reason` VARCHAR(255) NOT NULL , PRIMARY KEY (`exempt_address`)) ENGINE = MyISAM;
