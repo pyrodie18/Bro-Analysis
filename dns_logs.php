@@ -30,9 +30,28 @@ $currentFile = "../test2/dns.log"; //use only for testing
 		$typeName = ReturnString($tmpRecord[DNS_TYPENAME]);
 		$responseName = ReturnString($tmpRecord[DNS_RESPONSECODENAME]);
 		$answers = ReturnString($tmpRecord[DNS_ANSWERS]);
+
+		//Break domain down into subelements
+		$domain = str_getcsv($query, ".");
+		//Get the last two elements of the array and assign it to Top Level Domain
+		if (count($domain) >= 2) {
+			$tld = $domain[count($domain)-2] . "." . $domain[count($domain)-1];
+		} else {
+			$tld = $query;
+		}
+
+		//If there are subdomain elements, assign them to subdomain
+		if (count($domain) > 2) {
+			$subdomain = $domain[0];
+			for ($a = 1; $a <= count($domain) - 3; $a++) {
+				$subdomain = $subdomain . "." . $domain[$a];
+			}
+		} else {
+			$subdomain = "";
+		}
 		
 		//Build $currentRecordVals
-		$currentRecordVals = "('$uid', '$transID', '$query', '$className', '$typeName', '$responseName', '$answers')";
+		$currentRecordVals = "('$uid', '$transID', '$subdomain', '$tld', '$className', '$typeName', '$responseName', '$answers')";
 
 		if ($i == 1) { //First record, no need to add the comma
 			$insertStatement = $insertStatement . $currentRecordVals;
@@ -63,7 +82,6 @@ $currentFile = "../test2/dns.log"; //use only for testing
 					//$sql = "SELECT * from passive_dns;";
 					$sql = "SELECT * from passive_dns WHERE PASSIVE_QUERY = '$query' and PASSIVE_ANSWER = INET6_ATON('$value');";
 					//Make sure that the query/answer combo doesn't already exist
-					printf ("%s \n", $sql);
 					$numRows = num_rows($sql);
 					if ($numRows > 0) {
 						$sql = "UPDATE passive_dns SET passive_lastfound = FROM_UNIXTIME($ts), passive_count = passive_count + 1 WHERE PASSIVE_QUERY = '$query' and PASSIVE_ANSWER = INET6_ATON('$value');";
