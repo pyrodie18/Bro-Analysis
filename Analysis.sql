@@ -4,36 +4,24 @@ FROM passive_dns);
 INSERT INTO tmp_known_ips (ip_address) SELECT exempt_address FROM exempt_ips;
 
 
-/*FIND ALL DESINATION ADDRESSES THAT DIDN'T HAVE A CORRESPONDING DNS ANSWER*/
-SELECT DISTINCT(INET6_NTOA(bro_conn.CONN_RESPH)) AS missing_address
-FROM bro_conn
-LEFT JOIN tmp_known_ips ON tmp_known_ips.ip_address = bro_conn.CONN_RESPH
-WHERE tmp_known_ips.ip_address IS NULL AND 
-(bro_conn.CONN_RESPH < INET6_ATON('10.3.0.0') OR bro_conn.CONN_RESPH > INET6_ATON('10.3.255.255')) AND NOT 
-(bro_conn.CONN_ORIGH = inet6_aton('10.3.58.4') AND bro_conn.CONN_RESPP = 53) 
-ORDER BY CONN_ORIGH, CONN_RESPH, CONN_RESPP
+/*1A.  Are there unusual user agent strings?
+Filter BRO_CONN and BRO_HTTP for connections originating from internal hosts.  Show count of times each user agent is used
+and the number of hosts using that user agent.  Sort by number of hosts using the user agent*/
+SELECT bro_http.HTTP_USERAGENT, COUNT(bro_http.HTTP_USERAGENT) as SumOfAgent, COUNT(DISTINCT(bro_conn.CONN_ORIGH)) as SumOfHosts
+FROM bro_http
+LEFT JOIN bro_conn
+ON bro_http.HTTP_UID = bro_conn.CONN_UID
+where bro_conn.CONN_ORIGH >= INET6_ATON('10.0.0.0') AND bro_conn.CONN_ORIGH <= INET6_ATON('10.255.255.255')
+GROUP BY bro_http.HTTP_USERAGENT
+ORDER BY SumOfHosts DESC;
 
-
-/*FIND SOURCE HOST/PORT AND DESTINATION HOST/PORT PAIRS FOR DESTINATION ADDRESSES THAT DIDN'T HAVE A CORRESPONDING DNS ANSWER (USE TO CHART PAIRINGS)*/
-SELECT INET6_NTOA(bro_conn.CONN_ORIGH) as CONN_ORIGH, bro_conn.CONN_ORIGP, INET6_NTOA(bro_conn.CONN_RESPH) AS CONN_RESPH, bro_conn.CONN_RESPP 
-FROM bro_conn 
-LEFT JOIN tmp_known_ips ON tmp_known_ips.ip_address = bro_conn.CONN_RESPH 
-WHERE tmp_known_ips.ip_address IS NULL AND 
-(bro_conn.CONN_RESPH < INET6_ATON('10.3.0.0') OR bro_conn.CONN_RESPH > INET6_ATON('10.3.255.255')) AND NOT 
-(bro_conn.CONN_ORIGH = inet6_aton('10.3.58.4') AND bro_conn.CONN_RESPP = 53) 
-ORDER BY CONN_ORIGH, CONN_RESPH, CONN_RESPP
-
-
-/*LIST ALL DESTINATION PORTS AND COUNT NUMBER OF HITS PER PORT.....ORDER BY PORT COUNT*/
-SELECT bro_conn.CONN_RESPP, count(bro_conn.CONN_RESPP) AS port_count 
-FROM bro_conn 
-GROUP BY CONN_RESPP 
-ORDER BY `port_count` DESC 
-
-
-/*ALL PORT 445 TRAFFIC EXCLUDING IDENTIFIED DOMAIN CONTROLLERS*/
-SELECT inet6_ntoa(CONN_ORIGH), inet6_ntoa(CONN_RESPH), count(*) AS count 
-FROM bro_conn 
-WHERE (bro_conn.CONN_ORIGP = 445 OR bro_conn.CONN_RESPP= 445) AND NOT 
-(bro_conn.CONN_RESPH = INET6_ATON('10.3.58.4') OR bro_conn.CONN_ORIGH = INET6_ATON('10.3.58.4')) 
-GROUP BY CONN_ORIGH, CONN_RESPH
+/*1B.  Are there unusual user agent strings?
+Filter BRO_CONN and BRO_HTTP for connections originating from internal hosts.  Show count of times each user agent is used
+and the number of hosts using that user agent.  Sort by number of hosts using the user agent*/
+SELECT bro_http.HTTP_USERAGENT, COUNT(bro_http.HTTP_USERAGENT) as SumOfAgent, COUNT(DISTINCT(bro_conn.CONN_ORIGH)) as SumOfHosts
+FROM bro_http
+LEFT JOIN bro_conn
+ON bro_http.HTTP_UID = bro_conn.CONN_UID
+where bro_conn.CONN_ORIGH >= INET6_ATON('10.0.0.0') AND bro_conn.CONN_ORIGH <= INET6_ATON('10.255.255.255')
+GROUP BY bro_http.HTTP_USERAGENT
+ORDER BY SumOfAgent DESC;
