@@ -1,9 +1,3 @@
-/*CREATE TEMP TABLE WITH ALL IPS IDENTIFIED FROM PASSIVE_DNS AND EXEMPT_IPS*/
-CREATE TABLE IF NOT EXISTS tmp_known_ips AS (SELECT distinct(PASSIVE_ANSWER) AS ip_address 
-FROM passive_dns);
-INSERT INTO tmp_known_ips (ip_address) SELECT exempt_address FROM exempt_ips;
-
-
 /*1A.  Are there unusual user agent strings?
 Filter BRO_CONN and BRO_HTTP for connections originating from internal hosts.  Show count of times each user agent is used
 and the number of hosts using that user agent.  Sort by number of hosts using the user agent*/
@@ -45,3 +39,19 @@ WHERE bro_conn.CONN_CONNSTATE = "SF" AND
 (bro_conn.CONN_ORIGH < INET6_ATON('10.0.0.0') OR bro_conn.CONN_ORIGH > INET6_ATON('10.255.255.255'))
 /*Add line about exclude DNS, web servers, and email*/
 ORDER BY bro_conn.CONN_TS
+
+
+/*4.  Are there any connections from internal hosts to external hosts without a corresponding DNS request
+CREATE TEMP TABLE WITH ALL IPS IDENTIFIED FROM PASSIVE_DNS AND EXEMPT_IPS*/
+CREATE TABLE IF NOT EXISTS tmp_known_ips AS (SELECT distinct(PASSIVE_ANSWER) AS ip_address 
+FROM passive_dns);
+
+/*FIND ALL DESINATION ADDRESSES THAT DIDN'T HAVE A CORRESPONDING DNS ANSWER
+Filter out DNS traffic*/
+SELECT DISTINCT(INET6_NTOA(bro_conn.CONN_RESPH)) AS missing_address
+FROM bro_conn
+LEFT JOIN tmp_known_ips ON tmp_known_ips.ip_address = bro_conn.CONN_RESPH
+WHERE tmp_known_ips.ip_address IS NULL AND 
+(bro_conn.CONN_RESPH < INET6_ATON('10.3.0.0') OR bro_conn.CONN_RESPH > INET6_ATON('10.3.255.255')) AND NOT 
+(bro_conn.CONN_ORIGH = inet6_aton('10.3.58.4') AND bro_conn.CONN_RESPP = 53) 
+ORDER BY CONN_ORIGH, CONN_RESPH, CONN_RESPP
