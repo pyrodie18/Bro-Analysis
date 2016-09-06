@@ -30,6 +30,7 @@ $currentFile = "../test2/dns.log"; //use only for testing
 		$typeName = ReturnString($tmpRecord[DNS_TYPENAME]);
 		$responseName = ReturnString($tmpRecord[DNS_RESPONSECODENAME]);
 		$answers = ReturnString($tmpRecord[DNS_ANSWERS]);
+		$ttl = ReturnNum($tmpRecord[DNS_TTL]);
 
 		//Break domain down into subelements
 		$domain = str_getcsv($query, ".");
@@ -51,7 +52,7 @@ $currentFile = "../test2/dns.log"; //use only for testing
 		}
 		
 		//Build $currentRecordVals
-		$currentRecordVals = "('$uid', '$transID', '$subdomain', '$tld', '$className', '$typeName', '$responseName', '$answers')";
+		$currentRecordVals = "('$uid', '$transID', '$subdomain', '$tld', '$className', '$typeName', '$responseName', '$answers', $ttl)";
 
 		if ($i == 1) { //First record, no need to add the comma
 			$insertStatement = $insertStatement . $currentRecordVals;
