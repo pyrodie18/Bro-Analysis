@@ -35,3 +35,13 @@ WHERE bro_conn.CONN_RESPP = 445
 /*Add line about exclude domain controllers*/
 GROUP BY bro_conn.CONN_ORIGH, bro_conn.CONN_RESPH
 ORDER BY total_connections DESC
+
+
+/*3.  Are there any external originating connections to unexpected hosts?
+Filter BRO_CONN for all connections originating from outside the network that complete (state of SF).  Remove expected connections (DNS, web servers, SMTP, etc)*/
+SELECT bro_conn.CONN_TS AS TIME, INET6_NTOA(bro_conn.CONN_ORIGH) AS SRC_IP, bro_conn.CONN_ORIGP AS SRC_PORT, INET6_NTOA(bro_conn.CONN_RESPH) AS DST_IP, bro_conn.CONN_RESPP AS DST_PORT, bro_conn.CONN_PROTO AS PROTOCOL, bro_conn.CONN_ORIGIPBYTES AS SRC_BYTES, bro_conn.CONN_RESPIPBYTES AS DST_BYTES, bro_conn.CONN_UID AS UID
+FROM bro_conn
+WHERE bro_conn.CONN_CONNSTATE = "SF" AND
+(bro_conn.CONN_ORIGH < INET6_ATON('10.0.0.0') OR bro_conn.CONN_ORIGH > INET6_ATON('10.255.255.255'))
+/*Add line about exclude DNS, web servers, and email*/
+ORDER BY bro_conn.CONN_TS
