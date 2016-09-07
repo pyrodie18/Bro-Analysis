@@ -80,4 +80,24 @@ FROM (
 GROUP BY IP
 
 
+/*6.  How many total bytes were recieved by a single host?
+Create a table that displays all IPs seen on the network (as source or destination) and
+figure out much each of them recieved as a source or destination and total*/
+SELECT IP AS SRC_IP,
+       SUM(CASE WHEN Type = 'SRC' THEN BYTES ELSE 0 END) AS SRC_BYTES,
+       SUM(CASE WHEN Type = 'DST' THEN BYTES ELSE 0 END) AS DST_BYTES,
+       SUM(BYTES) AS TOTAL_BYTES
+FROM (
+  SELECT INET6_NTOA(bro_conn.CONN_ORIGH) as IP, 
+         SUM(bro_conn.CONN_RESPIPBYTES) AS BYTES,
+         'SRC' AS Type 
+  FROM bro_conn 
+  GROUP BY IP
 
+  UNION ALL
+
+  SELECT INET6_NTOA(bro_conn.CONN_RESPH) as IP, 
+         SUM(bro_conn.CONN_ORIGIPBYTES) AS BYTES,
+         'DST' AS Type  
+  FROM bro_conn GROUP BY IP) AS t
+GROUP BY IP
