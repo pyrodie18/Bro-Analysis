@@ -55,3 +55,29 @@ WHERE tmp_known_ips.ip_address IS NULL AND
 (bro_conn.CONN_RESPH < INET6_ATON('10.3.0.0') OR bro_conn.CONN_RESPH > INET6_ATON('10.3.255.255')) AND NOT 
 (bro_conn.CONN_ORIGH = inet6_aton('10.3.58.4') AND bro_conn.CONN_RESPP = 53) 
 ORDER BY CONN_ORIGH, CONN_RESPH, CONN_RESPP
+
+
+/*5.  How many total bytes were sent by a single host?
+Create a table that displays all IPs seen on the network (as source or destination) and
+figure out much each of them sent as a source or destination and total*/
+SELECT IP AS SRC_IP,
+       SUM(CASE WHEN Type = 'SRC' THEN BYTES ELSE 0 END) AS SRC_BYTES,
+       SUM(CASE WHEN Type = 'DST' THEN BYTES ELSE 0 END) AS DST_BYTES,
+       SUM(BYTES) AS TOTAL_BYTES
+FROM (
+  SELECT INET6_NTOA(bro_conn.CONN_ORIGH) as IP, 
+         SUM(bro_conn.CONN_ORIGIPBYTES) AS BYTES,
+         'SRC' AS Type 
+  FROM bro_conn 
+  GROUP BY IP
+
+  UNION ALL
+
+  SELECT INET6_NTOA(bro_conn.CONN_RESPH) as IP, 
+         SUM(bro_conn.CONN_RESPIPBYTES) AS BYTES,
+         'DST' AS Type  
+  FROM bro_conn GROUP BY IP) AS t
+GROUP BY IP
+
+
+
