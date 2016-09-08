@@ -2,16 +2,17 @@
 <?php
 include_once('functions.php');
 include_once('config.php');
-//function LoadBroFileLogs(array $fileNames) {
+function LoadBroConnLogs(array $fileName) {
 /**
  * This file contains all of the functionality to import bro conn logs into the database
  * All CONSTANTS are defined within config.php
  */
+print("Importing conn log file $fileName \n");
 $insertStatement = ""; //Holds the overall SQL insert statement
 $currentRecordVals = ""; //Holds the values for this particular record before adding to $insertStatement
 //foreach ($fileNames as $currentFile) {
-$currentFile = "../test2/conn.log"; //use only for testing
-	$file = fopen($currentFile, "r");
+//$currentFile = "../test2/conn.log"; //use only for testing
+	$file = fopen($fileName, "r");
 	$i = 1;
 	$insertStatement = CONN_LOG_INSERT;
 	$completeStatement = True;
@@ -72,6 +73,10 @@ $currentFile = "../test2/conn.log"; //use only for testing
 		$completeStatement = True;
 	}
 //}
-//}
+}
+
+function LoadBroConnLogsTest($fileName) {
+print("Importing conn log file $fileName \n");
+}
 ?>
 
